@@ -44,8 +44,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-hasura-admin-secret": process.env
-            .HASURA_GRAPHQL_ADMIN_SECRET as string,
+          "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET as string,
         },
         body: JSON.stringify({
           query: `
