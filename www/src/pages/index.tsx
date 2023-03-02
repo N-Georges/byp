@@ -1,10 +1,20 @@
 import Head from "next/head";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+type Data = {
+  id: string;
+  name: string;
+};
+
+export default function Home({
+  friends,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log(friends);
+
   return (
     <>
       <Head>
@@ -13,7 +23,51 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>Hello</main>
+      <main className={styles.main}>
+        {friends.map((friend: Data) => (
+          <div key={friend.id}>
+            <h1>{friend.name}</h1>
+          </div>
+        ))}
+      </main>
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  let friends = [];
+
+  try {
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT as string,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-hasura-admin-secret": process.env
+            .HASURA_GRAPHQL_ADMIN_SECRET as string,
+        },
+        body: JSON.stringify({
+          query: `
+            query {
+              friend {
+                id
+                name
+              }
+            }
+          `,
+        }),
+      }
+    );
+
+    const result = await response.json();
+    const data = result.data;
+    friends = data.friend;
+  } catch (err) {
+    console.log(err);
+  }
+
+  return {
+    props: { friends },
+  };
+};
