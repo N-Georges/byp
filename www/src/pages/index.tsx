@@ -2,6 +2,8 @@ import Head from "next/head";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import client from "@/clients/apollo-client";
+import { DocumentNode, gql } from "@apollo/client";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,8 +15,6 @@ type Data = {
 export default function Home({
   friends,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  console.log(friends);
-
   return (
     <>
       <Head>
@@ -24,7 +24,7 @@ export default function Home({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        {friends.map((friend: Data) => (
+        {friends?.map((friend: Data) => (
           <div key={friend.id}>
             <h1>{friend.name}</h1>
           </div>
@@ -34,39 +34,28 @@ export default function Home({
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  let friends = [];
-
-  try {
-    const response = await fetch(
-      process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT as string,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET as string,
-        },
-        body: JSON.stringify({
-          query: `
-            query {
-              friend {
-                id
-                name
-              }
-            }
-          `,
-        }),
-      }
-    );
-
-    const result = await response.json();
-    const data = result.data;
-    friends = data.friend;
-  } catch (err) {
-    console.log(err);
+const QUERY = gql`
+  query {
+    friend {
+      id
+      name
+    }
   }
+`;
 
-  return {
-    props: { friends },
-  };
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return client
+    .query({
+      query: QUERY as DocumentNode,
+    })
+    .then((d) => {
+      return {
+        props: { friends: d.data.friend },
+      };
+    })
+    .catch((e) => {
+      return {
+        props: {},
+      };
+    });
 };
