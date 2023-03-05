@@ -14,25 +14,28 @@ const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT,
 });
 
-const wsLink = !isServerSide
-  ? new GraphQLWsLink(
-      createClient({
-        url: process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT_WS as string,
-        lazy: true,
-        connectionParams: async () => {
-          return !isServerSide
-            ? {
-                headers: {
-                  "Content-Type": "application/json",
-                  "x-hasura-admin-secret": process.env
-                    .HASURA_ADMIN_SECRET as string,
-                },
-              }
-            : {};
-        },
-      })
-    )
-  : null;
+const wsLink =
+  typeof window !== "undefined"
+    ? new GraphQLWsLink(
+        createClient({
+          url: (
+            process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT as string
+          ).replace("http", "ws"),
+          lazy: true,
+          connectionParams: async () => {
+            return !isServerSide
+              ? {
+                  headers: {
+                    "Content-Type": "application/json",
+                    "x-hasura-admin-secret": process.env
+                      .HASURA_ADMIN_SECRET as string,
+                  },
+                }
+              : {};
+          },
+        })
+      )
+    : null;
 
 const link = wsLink
   ? split(
