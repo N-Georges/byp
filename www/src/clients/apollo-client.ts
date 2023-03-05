@@ -14,7 +14,8 @@ const authLink = setContext((_, { headers }) => {
     headers: {
       ...headers,
       "Content-Type": "application/json",
-      "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET as string,
+      "x-hasura-admin-secret": process.env
+        .HASURA_GRAPHQL_ADMIN_SECRET as string,
     },
   };
 });
@@ -34,7 +35,7 @@ const wsLink =
               headers: {
                 "Content-Type": "application/json",
                 "x-hasura-admin-secret": process.env
-                  .HASURA_ADMIN_SECRET as string,
+                  .HASURA_GRAPHQL_ADMIN_SECRET as string,
               },
             };
           },
