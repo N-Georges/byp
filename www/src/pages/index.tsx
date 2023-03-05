@@ -48,7 +48,7 @@ const QUERY = gql`
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return client
     .query({
-      query: QUERY as DocumentNode,
+      query: QUERY,
     })
     .then((d) => {
       return {
