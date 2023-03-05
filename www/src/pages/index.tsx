@@ -2,8 +2,8 @@ import Head from "next/head";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { gql } from "@apollo/client";
 import client from "@/clients/apollo-client";
-import { DocumentNode, gql } from "@apollo/client";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,7 +37,7 @@ export default function Home({
 }
 
 const QUERY = gql`
-  query {
+  query getFriends {
     friend {
       id
       name
