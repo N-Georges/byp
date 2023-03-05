@@ -15,6 +15,8 @@ type Data = {
 export default function Home({
   friends,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  console.log(friends);
+
   return (
     <>
       <Head>
