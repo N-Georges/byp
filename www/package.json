@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "codegen": "graphql-codegen -r dotenv/config --config codegen.yml dotenv_config_path=./.env"
   },
   "dependencies": {
     "@apollo/client": "^3.7.9",
@@ -14,6 +15,7 @@
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
     "@urql/core": "^3.1.1",
+    "dotenv": "^16.0.3",
     "eslint": "8.35.0",
     "eslint-config-next": "13.2.3",
     "graphql": "^16.6.0",
@@ -24,5 +26,12 @@
     "react-dom": "18.2.0",
     "typescript": "4.9.5",
     "urql": "^3.0.3"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "3.2.1",
+    "@graphql-codegen/introspection": "3.0.1",
+    "@graphql-codegen/typescript": "2.5.1",
+    "@graphql-codegen/typescript-document-nodes": "2.2.13",
+    "@graphql-codegen/typescript-operations": "2.4.2"
   }
 }

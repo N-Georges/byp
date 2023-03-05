@@ -1,12 +1,16 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import { gql, useQuery } from "@apollo/client";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import client from "@/clients/apollo-client";
+import {
+  GetFriends,
+  GetFriendsQuery,
+  GetFriendsQueryVariables,
+} from "@/generated/graphql";
 
-type Data = {
-  id: string;
-  name: string;
+type Props = {
+  friends: GetFriendsQuery["friend"];
 };
 
 const QUERY = gql`
@@ -18,9 +22,7 @@ const QUERY = gql`
   }
 `;
 
-export default function Home({
-  friends,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+const Home: NextPage<Props> = ({ friends }) => {
   // const { loading, error, data } = useQuery(QUERY);
 
   console.log(friends);
@@ -41,7 +43,7 @@ export default function Home({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        {friends.map((friend: Data) => (
+        {friends.map((friend) => (
           <div key={friend.id}>
             <h1>{friend.name}</h1>
           </div>
@@ -49,18 +51,16 @@ export default function Home({
       </main>
     </>
   );
-}
+};
+
+export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { data } = await client.query({
-    query: gql`
-      query Friends {
-        friend {
-          id
-          name
-        }
-      }
-    `,
+  const { data } = await client.query<
+    GetFriendsQuery,
+    GetFriendsQueryVariables
+  >({
+    query: GetFriends,
   });
 
   return {
