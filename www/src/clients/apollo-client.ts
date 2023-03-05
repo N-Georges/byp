@@ -15,6 +15,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
+      "Content-Type": "application/json",
       "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET as string,
     },
   };
