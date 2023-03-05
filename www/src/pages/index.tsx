@@ -8,7 +8,7 @@ type Data = {
 };
 
 const QUERY = gql`
-  query getFriends {
+  query {
     friend {
       id
       name
