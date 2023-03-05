@@ -21,14 +21,14 @@ const authLink = setContext((_, { headers }) => {
 });
 
 const httpLink = createHttpLink({
-  uri: process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT,
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT,
 });
 
 const wsLink =
   typeof window !== "undefined"
     ? new GraphQLWsLink(
         createClient({
-          url: process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT_WS as string,
+          url: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT_WS as string,
           lazy: true,
           connectionParams: async () => {
             return {

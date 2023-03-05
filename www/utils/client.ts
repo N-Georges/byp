@@ -11,7 +11,7 @@ const isServerSide = typeof window === "undefined";
 
 const wsClient = () =>
   createWSClient({
-    url: (process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT as string).replace(
+    url: (process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT as string).replace(
       "http",
       "ws"
     ),
@@ -49,7 +49,7 @@ const subscribeOrNoopExchange = () =>
       });
 
 const clientConfig = {
-  url: process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT as string,
+  url: process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT as string,
   fetchOptions: () => {
     return !isServerSide
       ? {
