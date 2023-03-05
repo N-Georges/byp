@@ -12,10 +12,6 @@ const isServerSide = typeof window === "undefined";
 
 const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT,
-  headers: {
-    "Content-Type": "application/json",
-    "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET as string,
-  },
 });
 
 const wsLink =
