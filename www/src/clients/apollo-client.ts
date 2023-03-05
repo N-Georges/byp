@@ -9,8 +9,6 @@ import { getMainDefinition } from "@apollo/client/utilities";
 import { createClient } from "graphql-ws";
 import { setContext } from "@apollo/client/link/context";
 
-const isServerSide = typeof window === "undefined";
-
 const authLink = setContext((_, { headers }) => {
   return {
     headers: {
