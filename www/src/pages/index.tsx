@@ -1,6 +1,8 @@
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
 import { gql, useQuery } from "@apollo/client";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import client from "@/clients/apollo-client";
 
 type Data = {
   id: string;
@@ -16,18 +18,20 @@ const QUERY = gql`
   }
 `;
 
-export default function Home() {
-  const { loading, error, data } = useQuery(QUERY);
+export default function Home({
+  friends,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  // const { loading, error, data } = useQuery(QUERY);
 
-  console.log(data?.friend);
+  console.log(friends);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  if (error) {
-    console.error(error);
-    return <div>Error!</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
+  // if (error) {
+  //   console.error(error);
+  //   return <div>Error!</div>;
+  // }
   return (
     <>
       <Head>
@@ -37,7 +41,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        {data?.friend.map((friend: Data) => (
+        {friends.map((friend: Data) => (
           <div key={friend.id}>
             <h1>{friend.name}</h1>
           </div>
@@ -46,3 +50,22 @@ export default function Home() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { data } = await client.query({
+    query: gql`
+      query Friends {
+        friend {
+          id
+          name
+        }
+      }
+    `,
+  });
+
+  return {
+    props: {
+      friends: data.friend,
+    },
+  };
+};
