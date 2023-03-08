@@ -5,7 +5,7 @@ import {
   SignupMutationVariables,
 } from "@/generated/graphql";
 import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { createJSONStorage, devtools, persist } from "zustand/middleware";
 
 export enum AUTH {
   AUTHED = "authed",
@@ -60,7 +60,7 @@ const useStore = create<Byp>()(
       }),
       {
         name: "byp",
-        getStorage: () => localStorage,
+        storage: createJSONStorage(() => localStorage),
       }
     )
   )

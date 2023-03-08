@@ -1,7 +1,7 @@
 const checkMessage = (message: string) => (arr: any[]) => {
   let status;
   if (arr.length) {
-    arr.map((error: any) => {
+    arr.forEach((error: any) => {
       if (error.message.includes(message)) {
         status = true;
       }
