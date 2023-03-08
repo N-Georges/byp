@@ -1,7 +1,6 @@
 import { useStore } from "@/store/store";
 
-type Props = {};
-export default function Header({}: Props) {
+export default function Header() {
   const user = useStore((store) => store.user);
   return (
     <div className="navbar bg-base-100">
@@ -24,7 +23,9 @@ export default function Header({}: Props) {
       </div>
       <div className="flex-1">
         <a className="btn btn-ghost normal-case text-xl">daisyUI</a>
-        <p>{user?.username && user.username}</p>
+        <p className="text-3xl text-red-400">
+          {user?.username && user.username}
+        </p>
       </div>
       <div className="flex-none">
         <button className="btn btn-square btn-ghost">

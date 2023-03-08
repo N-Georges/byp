@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { gql } from "@apollo/client";
 import { GetServerSideProps, NextPage } from "next";
 import client from "@/clients/apollo-client";
 import {
@@ -12,16 +11,9 @@ type Props = {
   friends: GetFriendsQuery["friend"];
 };
 
-const QUERY = gql`
-  query {
-    friend {
-      id
-      username
-    }
-  }
-`;
-
 const Home: NextPage<Props> = ({ friends }) => {
+  console.log(friends);
+
   return (
     <>
       <Head>
