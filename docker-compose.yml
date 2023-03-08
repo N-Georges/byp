@@ -28,6 +28,12 @@ services:
       # HASURA_GRAPHQL_CONSOLE_ASSETS_DIR: /srv/console-assets
       ## uncomment next line to set an admin secret
       HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      HASURA_JWT_SECRET_TYPE: HS256
+      HASURA_JWT_SECRET_KEY: E8ei0oC05C5Cs0pMa0zPmq+xLKmuHtlapNa0UciOgJo=
+      ACTION_BASE_HANDLER : http://host.docker.internal:3000
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
+      HASURA_GRAPHQL_JWT_SECRET: '{"key": "E8ei0oC05C5Cs0pMa0zPmq+xLKmuHtlapNa0UciOgJo=", "type": "HS256"}'
+
 volumes:
   db_data:
 

@@ -9,3 +9,18 @@ array_relationships:
         table:
           name: pizza_order
           schema: public
+select_permissions:
+  - role: user
+    permission:
+      columns:
+        - id
+        - username
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+delete_permissions:
+  - role: user
+    permission:
+      filter:
+        id:
+          _eq: X-Hasura-User-Id

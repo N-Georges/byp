@@ -11,6 +11,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  uuid: any;
 };
 
 /** Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'. */
@@ -24,6 +25,14 @@ export type Boolean_Comparison_Exp = {
   _lte?: InputMaybe<Scalars['Boolean']>;
   _neq?: InputMaybe<Scalars['Boolean']>;
   _nin?: InputMaybe<Array<Scalars['Boolean']>>;
+};
+
+export type FriendOutput = {
+  __typename?: 'FriendOutput';
+  id?: Maybe<Scalars['uuid']>;
+  password?: Maybe<Scalars['String']>;
+  token: Scalars['String'];
+  username?: Maybe<Scalars['String']>;
 };
 
 /** Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'. */
@@ -84,11 +93,12 @@ export enum Cursor_Ordering {
 export type Friend = {
   __typename?: 'friend';
   id: Scalars['Int'];
-  name: Scalars['String'];
+  password?: Maybe<Scalars['String']>;
   /** An array relationship */
   pizza_orders: Array<Pizza_Order>;
   /** An aggregate relationship */
   pizza_orders_aggregate: Pizza_Order_Aggregate;
+  username: Scalars['String'];
 };
 
 
@@ -153,15 +163,18 @@ export type Friend_Bool_Exp = {
   _not?: InputMaybe<Friend_Bool_Exp>;
   _or?: InputMaybe<Array<Friend_Bool_Exp>>;
   id?: InputMaybe<Int_Comparison_Exp>;
-  name?: InputMaybe<String_Comparison_Exp>;
+  password?: InputMaybe<String_Comparison_Exp>;
   pizza_orders?: InputMaybe<Pizza_Order_Bool_Exp>;
   pizza_orders_aggregate?: InputMaybe<Pizza_Order_Aggregate_Bool_Exp>;
+  username?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "friend" */
 export enum Friend_Constraint {
   /** unique or primary key constraint on columns "id" */
-  FriendPkey = 'friend_pkey'
+  FriendPkey = 'friend_pkey',
+  /** unique or primary key constraint on columns "username" */
+  FriendUsernameKey = 'friend_username_key'
 }
 
 /** input type for incrementing numeric columns in table "friend" */
@@ -172,22 +185,25 @@ export type Friend_Inc_Input = {
 /** input type for inserting data into table "friend" */
 export type Friend_Insert_Input = {
   id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
   pizza_orders?: InputMaybe<Pizza_Order_Arr_Rel_Insert_Input>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate max on columns */
 export type Friend_Max_Fields = {
   __typename?: 'friend_max_fields';
   id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
 };
 
 /** aggregate min on columns */
 export type Friend_Min_Fields = {
   __typename?: 'friend_min_fields';
   id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
 };
 
 /** response of any mutation on the table "friend" */
@@ -216,8 +232,9 @@ export type Friend_On_Conflict = {
 /** Ordering options when selecting data from "friend". */
 export type Friend_Order_By = {
   id?: InputMaybe<Order_By>;
-  name?: InputMaybe<Order_By>;
+  password?: InputMaybe<Order_By>;
   pizza_orders_aggregate?: InputMaybe<Pizza_Order_Aggregate_Order_By>;
+  username?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: friend */
@@ -230,13 +247,16 @@ export enum Friend_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  Name = 'name'
+  Password = 'password',
+  /** column name */
+  Username = 'username'
 }
 
 /** input type for updating data in table "friend" */
 export type Friend_Set_Input = {
   id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate stddev on columns */
@@ -268,7 +288,8 @@ export type Friend_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Friend_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
 };
 
 /** aggregate sum on columns */
@@ -282,7 +303,9 @@ export enum Friend_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  Name = 'name'
+  Password = 'password',
+  /** column name */
+  Username = 'username'
 }
 
 export type Friend_Updates = {
@@ -355,6 +378,8 @@ export type Mutation_Root = {
   insert_pizza_topping_pizza?: Maybe<Pizza_Topping_Pizza_Mutation_Response>;
   /** insert a single row into the table: "pizza_topping_pizza" */
   insert_pizza_topping_pizza_one?: Maybe<Pizza_Topping_Pizza>;
+  login?: Maybe<FriendOutput>;
+  signup?: Maybe<FriendOutput>;
   /** update data of the table: "friend" */
   update_friend?: Maybe<Friend_Mutation_Response>;
   /** update single row of the table: "friend" */
@@ -515,6 +540,20 @@ export type Mutation_RootInsert_Pizza_Topping_PizzaArgs = {
 export type Mutation_RootInsert_Pizza_Topping_Pizza_OneArgs = {
   object: Pizza_Topping_Pizza_Insert_Input;
   on_conflict?: InputMaybe<Pizza_Topping_Pizza_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootLoginArgs = {
+  password: Scalars['String'];
+  username: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootSignupArgs = {
+  password: Scalars['String'];
+  username: Scalars['String'];
 };
 
 
@@ -2189,17 +2228,83 @@ export type Subscription_RootPizza_Topping_StreamArgs = {
   where?: InputMaybe<Pizza_Topping_Bool_Exp>;
 };
 
+export type LoginMutationVariables = Exact<{
+  username: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type LoginMutation = { __typename?: 'mutation_root', login?: { __typename?: 'FriendOutput', username?: string | null, token: string, id?: any | null } | null };
+
+export type SignupMutationVariables = Exact<{
+  username: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type SignupMutation = { __typename?: 'mutation_root', signup?: { __typename?: 'FriendOutput', username?: string | null, token: string, id?: any | null } | null };
+
 export type GetFriendsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetFriendsQuery = { __typename?: 'query_root', friend: Array<{ __typename?: 'friend', id: number, name: string }> };
+export type GetFriendsQuery = { __typename?: 'query_root', friend: Array<{ __typename?: 'friend', id: number, username: string }> };
+
+export type InsertFriendOneMutationVariables = Exact<{
+  username?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+}>;
 
 
+export type InsertFriendOneMutation = { __typename?: 'mutation_root', insert_friend_one?: { __typename?: 'friend', id: number, username: string } | null };
+
+export type CheckFriendQueryVariables = Exact<{
+  username?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CheckFriendQuery = { __typename?: 'query_root', friend: Array<{ __typename?: 'friend', id: number, username: string, password?: string | null }> };
+
+
+export const Login = gql`
+    mutation Login($username: String!, $password: String!) {
+  login(username: $username, password: $password) {
+    username
+    token
+    id
+  }
+}
+    `;
+export const Signup = gql`
+    mutation Signup($username: String!, $password: String!) {
+  signup(username: $username, password: $password) {
+    username
+    token
+    id
+  }
+}
+    `;
 export const GetFriends = gql`
     query GetFriends {
   friend {
     id
-    name
+    username
+  }
+}
+    `;
+export const InsertFriendOne = gql`
+    mutation InsertFriendOne($username: String, $password: String) {
+  insert_friend_one(object: {username: $username, password: $password}) {
+    id
+    username
+  }
+}
+    `;
+export const CheckFriend = gql`
+    query CheckFriend($username: String) {
+  friend(where: {username: {_eq: $username}}) {
+    id
+    username
+    password
   }
 }
     `;

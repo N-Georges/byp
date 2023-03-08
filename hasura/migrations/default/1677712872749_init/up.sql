@@ -1,7 +1,7 @@
 SET check_function_bodies = false;
 
 -- Table friend
-CREATE TABLE friend(id serial NOT NULL, "name" text NOT NULL, PRIMARY KEY(id));
+CREATE TABLE friend(id serial NOT NULL, username text UNIQUE, "password" text NULL, PRIMARY KEY(id));
 
 -- Table pizza
 CREATE TABLE pizza(id serial NOT NULL, title integer NOT NULL, PRIMARY KEY(id));

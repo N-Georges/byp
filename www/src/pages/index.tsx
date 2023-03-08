@@ -1,6 +1,5 @@
 import Head from "next/head";
-import styles from "@/styles/Home.module.css";
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { GetServerSideProps, NextPage } from "next";
 import client from "@/clients/apollo-client";
 import {
@@ -17,23 +16,12 @@ const QUERY = gql`
   query {
     friend {
       id
-      name
+      username
     }
   }
 `;
 
 const Home: NextPage<Props> = ({ friends }) => {
-  // const { loading, error, data } = useQuery(QUERY);
-
-  console.log(friends);
-
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-  // if (error) {
-  //   console.error(error);
-  //   return <div>Error!</div>;
-  // }
   return (
     <>
       <Head>
@@ -42,12 +30,13 @@ const Home: NextPage<Props> = ({ friends }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
+      <main>
         {friends.map((friend) => (
           <div key={friend.id}>
-            <h1>{friend.name}</h1>
+            <h1 className="text-3xl font-bold underline">{friend.username}</h1>
           </div>
         ))}
+        <button className="btn">Button</button>
       </main>
     </>
   );
